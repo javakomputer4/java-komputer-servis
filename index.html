@@ -6,7 +6,7 @@
   <title>JAVA KOMPUTER - Kasir & Service</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0e14">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body class="theme-dark">
   <div class="layout-wrapper no-print">
@@ -28,22 +28,22 @@
         </div>
 
         <nav class="side-menu">
-          <button class="menu-item active" onclick="switchView('dasbor', this)">
+          <button class="menu-item active" data-view="dasbor" onclick="switchView('dasbor', this)">
             <span class="icon">⊞</span> Dasbor
           </button>
-          <button class="menu-item" onclick="switchView('daftar', this)">
+          <button class="menu-item" data-view="daftar" onclick="switchView('daftar', this)">
             <span class="icon">📄</span> Daftar Service
           </button>
-          <button class="menu-item" onclick="openNewOrder()">
+          <button class="menu-item" data-view="order" onclick="openNewOrder()">
             <span class="icon">⊕</span> Order Service Baru
           </button>
-          <button class="menu-item" onclick="switchView('pelanggan', this)">
+          <button class="menu-item" data-view="pelanggan" onclick="switchView('pelanggan', this)">
             <span class="icon">👥</span> Data Pelanggan
           </button>
-          <button class="menu-item" onclick="switchView('backup', this)">
+          <button class="menu-item" data-view="backup" onclick="switchView('backup', this)">
             <span class="icon">💾</span> Import / Export Data
           </button>
-          <button class="menu-item" onclick="switchView('pengaturan', this)">
+          <button class="menu-item" data-view="pengaturan" onclick="switchView('pengaturan', this)">
             <span class="icon">⚙️</span> Pengaturan Toko
           </button>
         </nav>
@@ -112,7 +112,7 @@
           <div class="panel-card">
             <div class="panel-header">
               <h3>🕒 Service Terbaru</h3>
-              <button class="link-amber" onclick="switchView('daftar', document.querySelectorAll('.menu-item')[1])">Semua →</button>
+              <button class="link-amber" onclick="switchView('daftar')">Semua →</button>
             </div>
             <div id="recentServicesContainer"></div>
           </div>
@@ -269,7 +269,7 @@
 
             <div class="form-btns">
               <button type="submit" class="btn btn-amber">💾 Simpan Order Service</button>
-              <button type="button" class="btn btn-ghost" onclick="switchView('dasbor', document.querySelectorAll('.menu-item')[0])">Batal</button>
+              <button type="button" class="btn btn-ghost" onclick="switchView('dasbor')">Batal</button>
             </div>
           </form>
         </div>
@@ -304,7 +304,7 @@
       <section id="view-backup" class="view-section">
         <div class="panel-card">
           <h3 style="margin-bottom:8px;">Import Data Lama & Backup Offline/Online</h3>
-          <p class="text-muted" style="margin-bottom:16px;">Mendukung file JSON asli Anda (customers + invoice_history) serta backup format aplikasi.</p>
+          <p style="color:var(--text-muted);margin-bottom:16px;">Mendukung file JSON asli Anda (customers + invoice_history) serta backup format aplikasi.</p>
           <div class="backup-grid">
             <div class="backup-item">
               <h4>📥 Import File JSON</h4>
@@ -339,7 +339,7 @@
               <input type="text" id="setHp">
             </div>
             <div class="field">
-              <label>Alamat Lengkap (Baris 1 & 2)</label>
+              <label>Alamat Lengkap</label>
               <input type="text" id="setAlamat">
             </div>
             <div class="field">
@@ -367,9 +367,9 @@
     </div>
   </div>
 
-  <!-- AREA CETAK FAKTUR & THERMAL -->
+  <!-- AREA KHUSUS PRINT -->
   <div id="printArea" class="print-only"></div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

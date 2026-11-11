@@ -31,7 +31,7 @@ body { background: var(--bg-main); color: var(--text-main); font-size: 14px; }
 
 /* SIDEBAR */
 .sidebar {
-  width: 240px; background: var(--bg-side); border-right: 1px solid var(--border);
+  width: 245px; background: var(--bg-side); border-right: 1px solid var(--border);
   display: flex; flex-direction: column; justify-content: space-between; padding: 20px 14px; flex-shrink: 0;
 }
 .brand-logo { display: flex; align-items: center; gap: 10px; padding: 0 8px 20px; border-bottom: 1px solid var(--border); }

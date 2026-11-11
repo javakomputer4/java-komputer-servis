@@ -1,5 +1,5 @@
-const KEY_ORDERS = 'jk_orders_v2';
-const KEY_SETTINGS = 'jk_settings_v2';
+const KEY_ORDERS = 'jk_orders_v3';
+const KEY_SETTINGS = 'jk_settings_v3';
 
 const defaultSettings = {
   nama: 'JAVA KOMPUTER',
@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateDateHeader();
   renderAll();
   updateNetStatus();
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=3').catch(() => {});
 });
 
 window.addEventListener('online', updateNetStatus);
@@ -59,7 +59,12 @@ function switchView(viewId, btnEl) {
   document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
   document.getElementById('view-' + viewId).classList.add('active');
-  if (btnEl) btnEl.classList.add('active');
+  if (btnEl) {
+    btnEl.classList.add('active');
+  } else {
+    const targetBtn = document.querySelector(`.menu-item[data-view="${viewId}"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+  }
 
   const titles = {
     dasbor: 'Dasbor Bengkel',
@@ -78,7 +83,7 @@ function openNewOrder() {
   document.getElementById('formHeading').textContent = 'Buat Order Service Baru';
   document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
   document.getElementById('fakturNo').value = String(orders.length + 609).padStart(5, '0');
-  switchView('order', document.querySelectorAll('.menu-item')[2]);
+  switchView('order');
 }
 
 function formatRp(num) {
@@ -119,19 +124,16 @@ function renderDashboard() {
   document.getElementById('kpiSiap').textContent = siap;
   document.getElementById('kpiOmzet').textContent = formatRp(omzet);
 
-  // Alur Status
   document.getElementById('statusFlowList').innerHTML = STATUS_LIST.map(st => {
     const count = orders.filter(o => o.status === st).length;
     return `<li><span>${st}</span><strong>${count}</strong></li>`;
   }).join('');
 
-  // Unit Aktif per Kategori
   document.getElementById('categoryMiniGrid').innerHTML = KATEGORI_LIST.map(c => {
     const count = orders.filter(o => o.status !== 'Selesai/Diambil' && o.kategori === c.name).length;
     return `<div class="cat-box"><span>${c.icon}</span><strong>${count}</strong><small>${c.name}</small></div>`;
   }).join('');
 
-  // Service Terbaru
   const recentBox = document.getElementById('recentServicesContainer');
   if (orders.length === 0) {
     recentBox.innerHTML = `
@@ -230,7 +232,7 @@ function saveOrder(e) {
   }
 
   saveData();
-  switchView('daftar', document.querySelectorAll('.menu-item')[1]);
+  switchView('daftar');
 }
 
 function editOrder(id) {
@@ -253,7 +255,7 @@ function editOrder(id) {
   document.getElementById('harga').value = o.harga || o.total || 0;
   document.getElementById('diskon').value = o.diskon || 0;
   document.getElementById('deskripsi').value = o.deskripsi;
-  switchView('order', document.querySelectorAll('.menu-item')[2]);
+  switchView('order');
 }
 
 function deleteOrder(id) {
@@ -262,7 +264,6 @@ function deleteOrder(id) {
   saveData();
 }
 
-// CETAK FAKTUR PERSIS SEPERTI CONTOH GAMBAR ANDA
 function printFaktur(id) {
   const o = orders.find(x => x.id === id);
   if (!o) return;
@@ -367,7 +368,6 @@ function printFaktur(id) {
   window.print();
 }
 
-// CETAK TANDA TERIMA UKURAN STANDAR THERMAL
 function printThermal(id) {
   const o = orders.find(x => x.id === id);
   if (!o) return;
@@ -417,20 +417,10 @@ function sendWA(id) {
     hp = normalizePhone(hp);
   }
   const wa = hp.startsWith('0') ? '62' + hp.slice(1) : hp;
-  const pesan = `Halo *${o.nama}*,
-Info servis dari *${settings.nama}*:
-
-• No Faktur: *#${o.fakturNo}*
-• Unit: ${o.perangkat} (${o.kategori})
-• Keterangan: ${o.deskripsi.replace(/\n/g, ', ')}
-• Status: *${o.status}*
-• Total: *${formatRp(o.total)}*
-
-Terima kasih.`;
+  const pesan = `Halo *${o.nama}*,\nInfo servis dari *${settings.nama}*:\n\n• No Faktur: *#${o.fakturNo}*\n• Unit: ${o.perangkat} (${o.kategori})\n• Keterangan: ${o.deskripsi.replace(/\n/g, ', ')}\n• Status: *${o.status}*\n• Total: *${formatRp(o.total)}*\n\nTerima kasih.`;
   window.open(`https://wa.me/${wa}?text=${encodeURIComponent(pesan)}`, '_blank');
 }
 
-// PELANGGAN & IMPORT JSON LAMA
 function updateCustomerDatalist() {
   const names = [...new Set(orders.map(o => o.nama).filter(Boolean))];
   document.getElementById('custDatalist').innerHTML = names.map(n => `<option value="${n}">`).join('');
@@ -471,7 +461,7 @@ function renderCustomers() {
 
 function cariPelanggan(nama) {
   document.getElementById('searchInput').value = nama;
-  switchView('daftar', document.querySelectorAll('.menu-item')[1]);
+  switchView('daftar');
   renderTable();
 }
 
@@ -489,7 +479,8 @@ function importJSON(e) {
         const imported = raw.invoice_history.map(t => {
           const c = cMap[t.ID_Pelanggan] || {};
           const parts = String(t.Deskripsi || '').split('|').map(p => p.trim()).filter(Boolean);
-          const rawDev = (parts[0] || 'Perangkat').replace(/^(laptop|notebook|printer|hp|handphone|komputer|pc|tv)\s+/i, '');
+          const firstPart = parts[0] || 'Perangkat';
+          const rawDev = firstPart.replace(/^(laptop|notebook|printer|hp|handphone|komputer|pc|tv)\s+/i, '');
           return {
             id: t.ID_Transaksi || 'IMP-' + Math.random(),
             fakturNo: t.Nomor_Faktur || '-',
@@ -498,7 +489,7 @@ function importJSON(e) {
             perusahaan: c.Perusahaan || 'PT',
             noHp: normalizePhone(c.Telepon),
             alamat: c.Alamat || '',
-            kategori: detectKat(parts[0] || ''),
+            kategori: detectKat(firstPart),
             perangkat: rawDev,
             kelengkapan: '',
             status: 'Selesai/Diambil',
