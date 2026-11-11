@@ -3,293 +3,371 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JAVA KOMPUTER - Sistem Manajemen Servis</title>
+  <title>JAVA KOMPUTER - Kasir & Service</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#0b0e14">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="app-container no-print">
-    <!-- Header -->
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo-box">JK</div>
+<body class="theme-dark">
+  <div class="layout-wrapper no-print">
+    <!-- SIDEBAR KIRI -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="brand-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 36 36" width="28" height="28" fill="none">
+              <path d="M18 18C18 10 10 4 4 4C4 12 10 18 18 18Z" fill="#f59e0b"/>
+              <path d="M18 18C18 10 26 4 32 4C32 12 26 18 18 18Z" fill="#fbbf24"/>
+              <circle cx="18" cy="25" r="5" fill="#f59e0b"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="sideStoreName">JAVA KOMPUTER</h2>
+            <span>KASIR & SERVICE</span>
+          </div>
+        </div>
+
+        <nav class="side-menu">
+          <button class="menu-item active" onclick="switchView('dasbor', this)">
+            <span class="icon">⊞</span> Dasbor
+          </button>
+          <button class="menu-item" onclick="switchView('daftar', this)">
+            <span class="icon">📄</span> Daftar Service
+          </button>
+          <button class="menu-item" onclick="openNewOrder()">
+            <span class="icon">⊕</span> Order Service Baru
+          </button>
+          <button class="menu-item" onclick="switchView('pelanggan', this)">
+            <span class="icon">👥</span> Data Pelanggan
+          </button>
+          <button class="menu-item" onclick="switchView('backup', this)">
+            <span class="icon">💾</span> Import / Export Data
+          </button>
+          <button class="menu-item" onclick="switchView('pengaturan', this)">
+            <span class="icon">⚙️</span> Pengaturan Toko
+          </button>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="status-pill-net" id="networkBadge">● Online (Siap)</div>
+        <p class="footer-phone">📞 <span id="sidePhone">0859 0318 1959</span></p>
+        <p class="footer-addr" id="sideAddress">Jl. Pantai Ayah, Candirenggo Rt 01/02, Ayah, Kebumen, Jawa Tengah. Pos. 54473</p>
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <div class="main-area">
+      <!-- HEADER ATAS -->
+      <header class="page-header">
         <div>
-          <h1 id="headerStoreName">JAVA KOMPUTER</h1>
-          <p id="headerStoreSub">Servis Komputer, Laptop, Handphone, Printer & Elektronik</p>
+          <h1 id="pageTitle">Dasbor Bengkel</h1>
+          <p id="pageSubtitle">JAVA KOMPUTER - 11 November 2026</p>
         </div>
-      </div>
-      <div class="topbar-actions">
-        <span id="networkBadge" class="badge badge-online">● Online</span>
-        <button class="btn btn-outline" onclick="openSettings()">⚙️ Pengaturan Toko</button>
-      </div>
-    </header>
+        <div class="header-buttons">
+          <button class="btn btn-ghost" onclick="toggleTheme()" title="Ganti Tema Gelap / Terang">🌓 Ganti Tema</button>
+          <button class="btn btn-amber" onclick="openNewOrder()">+ Buat Order Service Baru</button>
+        </div>
+      </header>
 
-    <!-- Navigasi Tab -->
-    <nav class="nav-tabs">
-      <button class="tab-btn active" onclick="switchTab('servis', this)">📋 Daftar Servis & Kasir</button>
-      <button class="tab-btn" onclick="switchTab('tambah', this)">➕ Input Servis Baru</button>
-      <button class="tab-btn" onclick="switchTab('pelanggan', this)">👥 Data Pelanggan</button>
-      <button class="tab-btn" onclick="switchTab('backup', this)">💾 Import / Export Data</button>
-    </nav>
+      <!-- VIEW 1: DASBOR BENGKEL -->
+      <section id="view-dasbor" class="view-section active">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span>TOTAL SERVICE AKTIF</span>
+              <span class="kpi-ico text-blue">🔧</span>
+            </div>
+            <div class="kpi-val" id="kpiAktif">0</div>
+            <small>belum diambil pelanggan</small>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span>MENUNGGU SPAREPART</span>
+              <span class="kpi-ico text-amber">📦</span>
+            </div>
+            <div class="kpi-val" id="kpiPart">0</div>
+            <small>perlu dipesan / ditunggu</small>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span>SIAP DIAMBIL</span>
+              <span class="kpi-ico text-green">✅</span>
+            </div>
+            <div class="kpi-val" id="kpiSiap">0</div>
+            <small>kabari pelanggan</small>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span>TOTAL PENDAPATAN</span>
+              <span class="kpi-ico text-amber">💳</span>
+            </div>
+            <div class="kpi-val" id="kpiOmzet">Rp 0</div>
+            <small id="kpiOmzetSub">Total seluruh transaksi</small>
+          </div>
+        </div>
 
-    <!-- Statistik Ringkas -->
-    <section class="stats-grid">
-      <div class="stat-card">
-        <span>Total Transaksi</span>
-        <strong id="statTotal">0</strong>
-      </div>
-      <div class="stat-card">
-        <span>Antrean / Proses</span>
-        <strong id="statProses" class="text-warning">0</strong>
-      </div>
-      <div class="stat-card">
-        <span>Selesai / Siap Ambil</span>
-        <strong id="statSelesai" class="text-success">0</strong>
-      </div>
-      <div class="stat-card">
-        <span>Total Pendapatan</span>
-        <strong id="statOmzet" class="text-primary">Rp 0</strong>
-      </div>
-    </section>
+        <div class="dashboard-split">
+          <!-- KOLOM KIRI: SERVICE TERBARU -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <h3>🕒 Service Terbaru</h3>
+              <button class="link-amber" onclick="switchView('daftar', document.querySelectorAll('.menu-item')[1])">Semua →</button>
+            </div>
+            <div id="recentServicesContainer"></div>
+          </div>
 
-    <!-- TAB 1: DAFTAR SERVIS -->
-    <main id="tab-servis" class="tab-content active">
-      <div class="toolbar">
-        <input type="text" id="searchInput" placeholder="Cari nama pelanggan, instansi, no HP, tipe perangkat, atau no faktur..." oninput="renderServices()">
-        <select id="filterStatus" onchange="renderServices()">
-          <option value="ALL">Semua Status</option>
-          <option value="Antrean">Antrean</option>
-          <option value="Proses">Proses</option>
-          <option value="Menunggu Part">Menunggu Part</option>
-          <option value="Selesai">Selesai</option>
-          <option value="Diambil">Diambil / Lunas</option>
-        </select>
-        <button class="btn btn-primary" onclick="switchTab('tambah', document.querySelectorAll('.tab-btn')[1])">+ Servis Baru</button>
-      </div>
+          <!-- KOLOM KANAN: ALUR STATUS & KATEGORI -->
+          <div class="right-widgets">
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3>Alur Status</h3>
+              </div>
+              <ul class="status-flow-list" id="statusFlowList"></ul>
+            </div>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Faktur & Tgl</th>
-              <th>Pelanggan</th>
-              <th>Perangkat</th>
-              <th>Rincian Pekerjaan / Keluhan</th>
-              <th>Status & Pembayaran</th>
-              <th>Total</th>
-              <th>Cetak & Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="serviceTableBody"></tbody>
-        </table>
-      </div>
-    </main>
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3>Unit Aktif per Kategori</h3>
+              </div>
+              <div class="category-mini-grid" id="categoryMiniGrid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <!-- TAB 2: FORM INPUT / EDIT SERVIS -->
-    <main id="tab-tambah" class="tab-content">
-      <div class="card">
-        <h2 id="formTitle">Input Servis / Transaksi Baru</h2>
-        <form id="serviceForm" onsubmit="saveService(event)">
-          <input type="hidden" id="editId">
+      <!-- VIEW 2: DAFTAR SERVICE -->
+      <section id="view-daftar" class="view-section">
+        <div class="panel-card">
+          <div class="filter-bar">
+            <input type="text" id="searchInput" placeholder="Cari nama pelanggan, HP, tipe perangkat, atau nomor faktur..." oninput="renderTable()">
+            <select id="filterStatus" onchange="renderTable()">
+              <option value="ALL">Semua Status</option>
+              <option value="Diterima">Diterima</option>
+              <option value="Pemeriksaan">Pemeriksaan</option>
+              <option value="Menunggu Sparepart">Menunggu Sparepart</option>
+              <option value="Sedang Diperbaiki">Sedang Diperbaiki</option>
+              <option value="Siap Diambil">Siap Diambil</option>
+              <option value="Selesai/Diambil">Selesai/Diambil</option>
+            </select>
+            <select id="filterKategori" onchange="renderTable()">
+              <option value="ALL">Semua Kategori</option>
+              <option value="Komputer">Komputer</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Handphone">Handphone</option>
+              <option value="Printer">Printer</option>
+              <option value="Lain-lain">Lain-lain</option>
+            </select>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Faktur & Tgl</th>
+                  <th>Pelanggan</th>
+                  <th>Perangkat</th>
+                  <th>Rincian Kerusakan / Tindakan</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Aksi & Cetak</th>
+                </tr>
+              </thead>
+              <tbody id="serviceTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: FORM ORDER SERVICE BARU / EDIT -->
+      <section id="view-order" class="view-section">
+        <div class="panel-card">
+          <h3 id="formHeading" style="margin-bottom:16px;">Buat Order Service Baru</h3>
+          <form id="orderForm" onsubmit="saveOrder(event)">
+            <input type="hidden" id="editId">
+            <div class="form-grid">
+              <div class="field">
+                <label>Nomor Faktur</label>
+                <input type="text" id="fakturNo" required>
+              </div>
+              <div class="field">
+                <label>Tanggal Masuk</label>
+                <input type="date" id="tanggal" required>
+              </div>
+              <div class="field">
+                <label>Nama Pelanggan *</label>
+                <input type="text" id="nama" list="custDatalist" placeholder="Contoh: Ibu Hida" required oninput="autoFillCustomer()">
+                <datalist id="custDatalist"></datalist>
+              </div>
+              <div class="field">
+                <label>Instansi / Perusahaan</label>
+                <input type="text" id="perusahaan" placeholder="Contoh: PT / SMPN 1 Ayah / Pribadi">
+              </div>
+              <div class="field">
+                <label>No. WhatsApp / Telepon</label>
+                <input type="text" id="noHp" placeholder="08xxxxxxxxxx">
+              </div>
+              <div class="field">
+                <label>Alamat</label>
+                <input type="text" id="alamat" placeholder="Contoh: Mangunweni">
+              </div>
+              <div class="field">
+                <label>Kategori Perangkat *</label>
+                <select id="kategori" required>
+                  <option value="Laptop">Laptop</option>
+                  <option value="Komputer">Komputer</option>
+                  <option value="Handphone">Handphone</option>
+                  <option value="Printer">Printer</option>
+                  <option value="Lain-lain">Lain-lain</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Merek & Tipe Perangkat *</label>
+                <input type="text" id="perangkatNama" placeholder="Contoh: Lenovo Ideapad 320" required>
+              </div>
+              <div class="field">
+                <label>Kelengkapan Unit</label>
+                <input type="text" id="kelengkapan" placeholder="Contoh: Unit + Charger + Tas">
+              </div>
+              <div class="field">
+                <label>Status Pengerjaan</label>
+                <select id="status">
+                  <option value="Diterima">Diterima</option>
+                  <option value="Pemeriksaan">Pemeriksaan</option>
+                  <option value="Menunggu Sparepart">Menunggu Sparepart</option>
+                  <option value="Sedang Diperbaiki">Sedang Diperbaiki</option>
+                  <option value="Siap Diambil">Siap Diambil</option>
+                  <option value="Selesai/Diambil">Selesai/Diambil</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Metode Pembayaran</label>
+                <select id="pembayaran">
+                  <option value="Cash">Cash</option>
+                  <option value="Transfer BCA">Transfer BCA</option>
+                  <option value="Belum Lunas">Belum Lunas</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Quantity</label>
+                <input type="number" id="qty" value="1" min="1">
+              </div>
+              <div class="field">
+                <label>Harga Satuan / Biaya (Rp)</label>
+                <input type="number" id="harga" value="0" min="0" required>
+              </div>
+              <div class="field">
+                <label>Diskon (Rp)</label>
+                <input type="number" id="diskon" value="0" min="0">
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:12px;">
+              <label>Keluhan & Rincian Pekerjaan (Pisahkan baris baru atau tanda * untuk poin di Faktur) *</label>
+              <textarea id="deskripsi" rows="3" placeholder="* Replace Keyboard&#10;* Install Windows 10" required></textarea>
+            </div>
+
+            <div class="form-btns">
+              <button type="submit" class="btn btn-amber">💾 Simpan Order Service</button>
+              <button type="button" class="btn btn-ghost" onclick="switchView('dasbor', document.querySelectorAll('.menu-item')[0])">Batal</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- VIEW 4: DATA PELANGGAN -->
+      <section id="view-pelanggan" class="view-section">
+        <div class="panel-card">
+          <div class="filter-bar">
+            <input type="text" id="searchCust" placeholder="Cari pelanggan, instansi, nomor WA, atau alamat..." oninput="renderCustomers()">
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama Pelanggan</th>
+                  <th>Instansi</th>
+                  <th>No. HP / WA</th>
+                  <th>Alamat</th>
+                  <th>Total Servis</th>
+                  <th>Total Transaksi</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="customerTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: IMPORT / EXPORT BACKUP -->
+      <section id="view-backup" class="view-section">
+        <div class="panel-card">
+          <h3 style="margin-bottom:8px;">Import Data Lama & Backup Offline/Online</h3>
+          <p class="text-muted" style="margin-bottom:16px;">Mendukung file JSON asli Anda (customers + invoice_history) serta backup format aplikasi.</p>
+          <div class="backup-grid">
+            <div class="backup-item">
+              <h4>📥 Import File JSON</h4>
+              <p>Masukkan file data pelanggan dan faktur lama JAVA KOMPUTER.</p>
+              <input type="file" accept=".json" onchange="importJSON(event)">
+            </div>
+            <div class="backup-item">
+              <h4>📤 Export Backup JSON</h4>
+              <p>Unduh seluruh database terbaru untuk disimpan ke Google Drive.</p>
+              <button class="btn btn-amber" onclick="exportJSON()">Download Backup (.json)</button>
+            </div>
+            <div class="backup-item">
+              <h4>🗑️ Reset Data Lokal</h4>
+              <p>Bersihkan penyimpanan lokal browser ini.</p>
+              <button class="btn btn-danger" onclick="clearAll()">Hapus Semua Data</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 6: PENGATURAN TOKO -->
+      <section id="view-pengaturan" class="view-section">
+        <div class="panel-card">
+          <h3 style="margin-bottom:16px;">Pengaturan Identitas Toko & Nota</h3>
           <div class="form-grid">
-            <div class="form-group">
-              <label>Nomor Faktur</label>
-              <input type="text" id="noFaktur" required>
+            <div class="field">
+              <label>Nama Toko</label>
+              <input type="text" id="setNama">
             </div>
-            <div class="form-group">
-              <label>Tanggal</label>
-              <input type="date" id="tanggal" required>
+            <div class="field">
+              <label>No. HP / WhatsApp</label>
+              <input type="text" id="setHp">
             </div>
-            <div class="form-group">
-              <label>Instansi / Perusahaan (Opsional)</label>
-              <input type="text" id="perusahaan" placeholder="Contoh: PT / SDN 3 Demangsari / Umum">
+            <div class="field">
+              <label>Alamat Lengkap (Baris 1 & 2)</label>
+              <input type="text" id="setAlamat">
             </div>
-            <div class="form-group">
-              <label>Nama Pelanggan *</label>
-              <input type="text" id="nama" list="customerList" placeholder="Contoh: Ibu Hida / Bpk. Heru" required oninput="autofillCustomer()">
-              <datalist id="customerList"></datalist>
+            <div class="field">
+              <label>Kota (untuk tanggal Faktur)</label>
+              <input type="text" id="setKota">
             </div>
-            <div class="form-group">
-              <label>No. WhatsApp / HP</label>
-              <input type="text" id="noHp" placeholder="08xxxxxxxxxx">
+            <div class="field">
+              <label>Info Rekening Transfer</label>
+              <input type="text" id="setRekening">
             </div>
-            <div class="form-group">
-              <label>Alamat</label>
-              <input type="text" id="alamat" placeholder="Contoh: Mangunweni / Candirenggo">
-            </div>
-            <div class="form-group">
-              <label>Kategori Perangkat *</label>
-              <select id="kategori" required>
-                <option value="Laptop">Laptop / Notebook</option>
-                <option value="PC/Komputer">PC / Komputer</option>
-                <option value="Handphone">Handphone / Smartphone</option>
-                <option value="Printer">Printer</option>
-                <option value="Elektronik Lainnya">Elektronik Lainnya (TV, Proyektor, dll.)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Merek *</label>
-              <input type="text" id="merek" placeholder="Contoh: Lenovo, Asus, Epson, Samsung" required>
-            </div>
-            <div class="form-group">
-              <label>Tipe / Model Perangkat *</label>
-              <input type="text" id="tipe" placeholder="Contoh: Ideapad 320 / X441N / L3110" required>
-            </div>
-            <div class="form-group">
-              <label>Kelengkapan (Untuk Tanda Terima)</label>
-              <input type="text" id="kelengkapan" placeholder="Contoh: Unit + Charger + Tas">
-            </div>
-            <div class="form-group">
-              <label>Status Pengerjaan</label>
-              <select id="status">
-                <option value="Antrean">Antrean</option>
-                <option value="Proses">Proses</option>
-                <option value="Menunggu Part">Menunggu Part</option>
-                <option value="Selesai">Selesai</option>
-                <option value="Diambil">Diambil / Lunas</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Metode Pembayaran (Trf/Cash)</label>
-              <select id="metodeBayar">
-                <option value="Cash">Cash</option>
-                <option value="Transfer BCA">Transfer BCA</option>
-                <option value="Belum Lunas">Belum Lunas / DP</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Garansi</label>
-              <select id="garansi">
-                <option value="1 Bulan">Garansi 1 Bulan</option>
-                <option value="3 Bulan">Garansi 3 Bulan</option>
-                <option value="1 Minggu">Garansi 1 Minggu</option>
-                <option value="Non Garansi">Non Garansi</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Quantity</label>
-              <input type="number" id="qty" value="1" min="1" required>
-            </div>
-            <div class="form-group">
-              <label>Sub Total / Harga (Rp)</label>
-              <input type="number" id="subtotal" value="0" min="0" required oninput="calcTotal()">
-            </div>
-            <div class="form-group">
-              <label>Diskon (Rp)</label>
-              <input type="number" id="diskon" value="0" min="0" oninput="calcTotal()">
-            </div>
-            <div class="form-group">
-              <label>Total Akhir (Rp)</label>
-              <input type="number" id="total" value="0" min="0" required>
+            <div class="field">
+              <label>Nama Penanggung Jawab / Tanda Tangan</label>
+              <input type="text" id="setOwner">
             </div>
           </div>
-
-          <div class="form-group full-width">
-            <label>Keluhan & Rincian Tindakan / Sparepart * (Pisahkan baris baru atau tanda | untuk tiap item)</label>
-            <textarea id="keluhan" rows="3" placeholder="Contoh:&#10;* Replace Keyboard&#10;* Install Windows 10" required></textarea>
+          <div class="field" style="margin-top:12px;">
+            <label>Catatan Kaki pada Faktur (Note)</label>
+            <input type="text" id="setNote">
           </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">💾 Simpan Transaksi</button>
-            <button type="button" class="btn btn-outline" onclick="resetForm()">Batal / Reset</button>
-          </div>
-        </form>
-      </div>
-    </main>
-
-    <!-- TAB 3: PELANGGAN -->
-    <main id="tab-pelanggan" class="tab-content">
-      <div class="toolbar">
-        <input type="text" id="searchCustomerInput" placeholder="Cari nama pelanggan, instansi, nomor HP, atau alamat..." oninput="renderCustomers()">
-      </div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Nama & Instansi</th>
-              <th>No. WhatsApp</th>
-              <th>Alamat</th>
-              <th>Jumlah Servis</th>
-              <th>Total Belanja</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="customerTableBody"></tbody>
-        </table>
-      </div>
-    </main>
-
-    <!-- TAB 4: IMPORT / EXPORT BACKUP -->
-    <main id="tab-backup" class="tab-content">
-      <div class="card">
-        <h2>Backup & Migrasi Data (Offline & Online)</h2>
-        <p class="muted">Import file JSON lama Anda (otomatis membersihkan nama perangkat ganda) atau unduh cadangan data.</p>
-        <div class="backup-actions">
-          <div class="backup-box">
-            <h3>📥 Import Data JSON</h3>
-            <p>Mendukung file JSON asli Anda (<code>customers</code> + <code>invoice_history</code>) maupun format backup aplikasi ini.</p>
-            <input type="file" id="importFile" accept=".json" onchange="importJSON(event)">
-          </div>
-          <div class="backup-box">
-            <h3>📤 Export Backup JSON</h3>
-            <p>Unduh seluruh database aplikasi saat ini untuk disimpan ke Google Drive atau PC.</p>
-            <button class="btn btn-primary" onclick="exportJSON()">Download Backup (.json)</button>
-          </div>
-          <div class="backup-box">
-            <h3>🗑️ Reset Data Lokal</h3>
-            <p>Hapus semua data di browser ini untuk mengulang import dari awal.</p>
-            <button class="btn btn-danger" onclick="clearAllData()">Hapus Semua Data</button>
+          <div class="form-btns">
+            <button class="btn btn-amber" onclick="saveSettings()">Simpan Pengaturan Toko</button>
           </div>
         </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- MODAL PENGATURAN TOKO -->
-  <div id="settingsModal" class="modal no-print">
-    <div class="modal-content">
-      <h2>Pengaturan Profil & Rekening Faktur</h2>
-      <div class="form-group">
-        <label>Nama Toko</label>
-        <input type="text" id="setStoreName">
-      </div>
-      <div class="form-group">
-        <label>Alamat Baris 1</label>
-        <input type="text" id="setStoreAddress1">
-      </div>
-      <div class="form-group">
-        <label>Alamat Baris 2 & Kode Pos</label>
-        <input type="text" id="setStoreAddress2">
-      </div>
-      <div class="form-group">
-        <label>No. HP / WhatsApp Toko</label>
-        <input type="text" id="setStorePhone">
-      </div>
-      <div class="form-group">
-        <label>Kota (Untuk Tanggal Faktur)</label>
-        <input type="text" id="setStoreCity">
-      </div>
-      <div class="form-group">
-        <label>Info Rekening Bank (Tampil di Bawah Faktur)</label>
-        <input type="text" id="setBankInfo" placeholder="Transfer BCA | Rek. 7675 13 0914">
-      </div>
-      <div class="form-group">
-        <label>Nama Pemilik / Penandatangan</label>
-        <input type="text" id="setOwnerName">
-      </div>
-      <div class="form-group">
-        <label>Note / Catatan Bawah Faktur</label>
-        <textarea id="setStoreNote" rows="2"></textarea>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-primary" onclick="saveSettings()">Simpan Pengaturan</button>
-        <button class="btn btn-outline" onclick="closeSettings()">Tutup</button>
-      </div>
+      </section>
     </div>
   </div>
 
-  <!-- Area Cetak Khusus -->
+  <!-- AREA CETAK FAKTUR & THERMAL -->
   <div id="printArea" class="print-only"></div>
 
   <script src="app.js"></script>

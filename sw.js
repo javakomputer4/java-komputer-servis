@@ -1,4 +1,4 @@
-const CACHE_NAME = 'java-komputer-cache-v1';
+const CACHE_NAME = 'java-komputer-v3';
 const ASSETS = [
   './',
   './index.html',

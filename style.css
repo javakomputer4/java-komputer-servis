@@ -1,297 +1,180 @@
 :root {
-  --primary: #1d4ed8;
-  --primary-dark: #1e3a8a;
-  --bg: #f1f5f9;
-  --card: #ffffff;
-  --text: #0f172a;
-  --muted: #64748b;
+  --bg-main: #0b0e14;
+  --bg-side: #0f131a;
+  --bg-card: #131822;
+  --bg-hover: #1a212e;
+  --border: #222a38;
+  --text-main: #f1f5f9;
+  --text-muted: #8b95a5;
+  --amber: #f59e0b;
+  --amber-hover: #d97706;
+  --amber-text: #0b0e14;
+  --blue: #38bdf8;
+  --green: #22c55e;
+  --red: #ef4444;
+}
+
+body.theme-light {
+  --bg-main: #f1f5f9;
+  --bg-side: #0f172a;
+  --bg-card: #ffffff;
+  --bg-hover: #f8fafc;
   --border: #e2e8f0;
-  --success: #16a34a;
-  --warning: #d97706;
-  --danger: #dc2626;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-body { background: var(--bg); color: var(--text); font-size: 14px; }
+body { background: var(--bg-main); color: var(--text-main); font-size: 14px; }
 
-.app-container { max-width: 1250px; margin: 0 auto; padding: 16px; }
+.layout-wrapper { display: flex; min-height: 100vh; }
 
-/* Topbar */
-.topbar {
-  background: #0f172a; color: #fff; padding: 16px 20px; border-radius: 12px;
-  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+/* SIDEBAR */
+.sidebar {
+  width: 240px; background: var(--bg-side); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between; padding: 20px 14px; flex-shrink: 0;
 }
-.brand { display: flex; align-items: center; gap: 12px; }
-.logo-box {
-  width: 44px; height: 44px; background: var(--primary); border-radius: 10px;
-  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px;
+.brand-logo { display: flex; align-items: center; gap: 10px; padding: 0 8px 20px; border-bottom: 1px solid var(--border); }
+.logo-icon {
+  width: 38px; height: 38px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
 }
-.brand h1 { font-size: 18px; letter-spacing: 0.5px; }
-.brand p { font-size: 12px; color: #94a3b8; }
-.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.brand-logo h2 { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.4px; }
+.brand-logo span { font-size: 10px; color: #8b95a5; letter-spacing: 0.8px; display: block; }
 
-/* Badges & Buttons */
-.badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-.badge-online { background: #dcfce7; color: #166534; }
-.badge-offline { background: #fee2e2; color: #991b1b; }
-
-.btn {
-  padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;
-  font-size: 13px; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;
+.side-menu { margin-top: 18px; display: flex; flex-direction: column; gap: 4px; }
+.menu-item {
+  background: transparent; border: none; color: #94a3b8; padding: 10px 12px; border-radius: 8px;
+  text-align: left; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; transition: 0.2s;
 }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-dark); }
-.btn-outline { background: #fff; color: var(--text); border: 1px solid var(--border); }
-.btn-outline:hover { background: #f8fafc; }
-.btn-success { background: var(--success); color: #fff; }
-.btn-warning { background: #f59e0b; color: #fff; }
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-sm { padding: 5px 8px; font-size: 11px; }
+.menu-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.menu-item.active { background: rgba(245, 158, 11, 0.15); color: var(--amber); font-weight: 600; }
 
-/* Navigation */
-.nav-tabs { display: flex; gap: 8px; margin: 16px 0; overflow-x: auto; padding-bottom: 4px; }
-.tab-btn {
-  background: #fff; border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px;
-  cursor: pointer; font-weight: 600; color: var(--muted); white-space: nowrap;
+.sidebar-footer { border-top: 1px solid var(--border); padding-top: 14px; font-size: 11px; color: #8b95a5; line-height: 1.5; }
+.status-pill-net {
+  display: inline-block; padding: 3px 8px; border-radius: 12px; background: rgba(34, 197, 94, 0.15);
+  color: #4ade80; font-weight: 600; margin-bottom: 8px;
 }
-.tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.footer-phone { color: #cbd5e1; font-weight: 600; margin-bottom: 4px; }
 
-/* Stats */
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
-.stat-card { background: var(--card); padding: 16px; border-radius: 10px; border: 1px solid var(--border); }
-.stat-card span { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
-.stat-card strong { font-size: 20px; }
-.text-warning { color: var(--warning); }
-.text-success { color: var(--success); }
-.text-primary { color: var(--primary); }
+/* MAIN AREA */
+.main-area { flex: 1; padding: 24px 28px; overflow-x: hidden; }
+.page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+.page-header h1 { font-size: 24px; font-weight: 700; }
+.page-header p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.header-buttons { display: flex; gap: 10px; }
 
-/* Content & Table */
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.toolbar { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-.toolbar input { flex: 1; min-width: 220px; padding: 10px; border-radius: 8px; border: 1px solid var(--border); }
-.toolbar select { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: #fff; }
+/* BUTTONS */
+.btn { padding: 9px 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+.btn-amber { background: var(--amber); color: var(--amber-text); }
+.btn-amber:hover { background: var(--amber-hover); }
+.btn-ghost { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--bg-hover); }
+.btn-danger { background: var(--red); color: #fff; }
+.btn-sm { padding: 5px 9px; font-size: 11px; }
+.link-amber { background: none; border: none; color: var(--amber); font-weight: 600; cursor: pointer; font-size: 12px; }
 
-.table-wrapper { background: var(--card); border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
+/* KPI CARDS */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.kpi-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.kpi-head { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
+.kpi-val { font-size: 26px; font-weight: 700; margin: 10px 0 6px; }
+.kpi-card small { font-size: 11px; color: var(--text-muted); }
+
+/* DASHBOARD SPLIT */
+.dashboard-split { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; align-items: start; }
+.right-widgets { display: flex; flex-direction: column; gap: 16px; }
+.panel-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.panel-header h3 { font-size: 14px; font-weight: 600; }
+
+.empty-state { text-align: center; padding: 48px 16px; color: var(--text-muted); }
+.empty-state h4 { color: var(--text-main); margin-bottom: 6px; font-size: 15px; }
+.empty-state p { font-size: 12px; margin-bottom: 16px; }
+
+.recent-item {
+  display: flex; justify-content: space-between; align-items: center; padding: 12px;
+  border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; background: var(--bg-main);
+}
+.recent-item:hover { border-color: var(--amber); }
+
+/* ALUR STATUS & KATEGORI MINI */
+.status-flow-list { list-style: none; }
+.status-flow-list li {
+  display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-muted);
+}
+.status-flow-list li:last-child { border-bottom: none; }
+.status-flow-list li strong { color: var(--blue); }
+
+.category-mini-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; text-align: center; }
+.cat-box { background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 10px 4px; }
+.cat-box span { display: block; font-size: 16px; margin-bottom: 4px; }
+.cat-box strong { display: block; font-size: 15px; }
+.cat-box small { font-size: 10px; color: var(--text-muted); }
+
+/* TABLE & FORMS */
+.view-section { display: none; }
+.view-section.active { display: block; }
+.filter-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-bar input, .filter-bar select {
+  background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border); padding: 9px 12px; border-radius: 8px;
+}
+.filter-bar input { flex: 1; min-width: 220px; }
+
+.table-responsive { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th, td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { background: #f8fafc; font-size: 11px; text-transform: uppercase; color: var(--muted); }
-tr:hover { background: #f8fafc; }
+th { font-size: 11px; text-transform: uppercase; color: var(--text-muted); background: var(--bg-main); }
+tr:hover { background: var(--bg-hover); }
 
-.status-pill { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; }
-.st-Antrean { background: #e2e8f0; color: #334155; }
-.st-Proses { background: #fef3c7; color: #92400e; }
-.st-Menunggu { background: #ffedd5; color: #9a3412; }
-.st-Selesai { background: #dcfce7; color: #166534; }
-.st-Diambil { background: #dbeafe; color: #1e40af; }
+.badge-st { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; background: rgba(56, 189, 248, 0.15); color: var(--blue); }
+.badge-siap { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+.badge-part { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
 
-/* Form & Card */
-.card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
-.card h2 { margin-bottom: 16px; font-size: 17px; }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-.form-group { margin-bottom: 10px; }
-.form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #334155; }
-.form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+.field input, .field select, .field textarea {
+  width: 100%; background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border); padding: 9px 11px; border-radius: 8px;
 }
-.full-width { grid-column: 1 / -1; margin-top: 6px; }
-.form-actions { display: flex; gap: 10px; margin-top: 14px; }
+.form-btns { display: flex; gap: 10px; margin-top: 16px; }
 
-/* Backup */
-.backup-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 16px; }
-.backup-box { padding: 16px; border: 1px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; }
-.backup-box h3 { font-size: 15px; margin-bottom: 6px; }
-.backup-box p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.backup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.backup-item { background: var(--bg-main); border: 1px dashed var(--border); padding: 16px; border-radius: 10px; }
+.backup-item h4 { margin-bottom: 6px; }
+.backup-item p { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
 
-/* Modal */
-.modal {
-  display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
-  align-items: center; justify-content: center; padding: 16px; z-index: 100;
+@media (max-width: 900px) {
+  .layout-wrapper { flex-direction: column; }
+  .sidebar { width: 100%; }
+  .dashboard-split { grid-template-columns: 1fr; }
 }
-.modal.open { display: flex; }
-.modal-content { background: #fff; padding: 20px; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
 
-/* ================= PRINT STYLES ================= */
+/* PRINT STYLES (FAKTUR & THERMAL) */
 .print-only { display: none; }
-
 @media print {
   .no-print { display: none !important; }
-  .print-only { display: block !important; color: #000; background: #fff; }
-  body { background: #fff; margin: 0; padding: 0; }
+  .print-only { display: block !important; background: #fff !important; color: #000 !important; }
+  body { background: #fff !important; }
 
-  /* 1. FORMAT FAKTUR RESMI JAVA KOMPUTER */
-  .faktur-box {
-    width: 100%;
-    max-width: 210mm;
-    margin: 0 auto;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12.5px;
-    color: #000;
-    padding: 8px 12px;
-  }
-  .faktur-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 6px;
-  }
-  .faktur-brand-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .faktur-brand-title h1 {
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    margin: 0;
-  }
-  .faktur-title-right {
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    padding-right: 12px;
-  }
-  .faktur-sub-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #000;
-  }
-  .faktur-store-info {
-    line-height: 1.35;
-    font-weight: 600;
-  }
-  .faktur-meta-table {
-    border-collapse: collapse;
-    min-width: 250px;
-  }
-  .faktur-meta-table td {
-    padding: 1px 4px;
-    border: none;
-    font-weight: 700;
-    font-size: 12.5px;
-  }
-  .faktur-meta-val {
-    text-align: center;
-    min-width: 135px;
-  }
-  .faktur-cust-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 5px 0 8px 0;
-  }
-  .faktur-cust-left {
-    padding-left: 24px;
-    line-height: 1.35;
-    font-weight: 700;
-  }
-  .faktur-items-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-top: 3px double #000;
-    border-bottom: 3px double #000;
-  }
-  .faktur-items-table th {
-    background: none !important;
-    color: #000 !important;
-    text-transform: none;
-    font-size: 12.5px;
-    font-weight: 700;
-    padding: 4px 6px;
-    border-bottom: 1.5px solid #000;
-    text-align: center;
-  }
-  .faktur-items-table th.col-no { width: 32px; border-right: 1px solid #000; }
-  .faktur-items-table th.col-nama { text-align: center; }
-  .faktur-items-table th.col-qty { width: 75px; }
-  .faktur-items-table th.col-harga { width: 110px; }
-  .faktur-items-table th.col-jumlah { width: 110px; }
+  /* FAKTUR RESMI JAVA KOMPUTER */
+  .faktur-box { width: 100%; font-family: Arial, sans-serif; font-size: 12px; color: #000; padding: 8px; }
+  .faktur-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .faktur-brand { display: flex; align-items: center; gap: 8px; }
+  .faktur-brand h1 { font-size: 22px; font-weight: 900; letter-spacing: 0.5px; margin: 0; }
+  .faktur-title { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+  .faktur-info-grid { display: flex; justify-content: space-between; margin-bottom: 6px; line-height: 1.4; }
+  .faktur-cust-row { display: flex; justify-content: space-between; border-top: 1.5px solid #000; padding: 6px 0; line-height: 1.4; }
+  .faktur-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .faktur-table th { border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 5px; text-align: center; font-weight: bold; }
+  .faktur-table td { padding: 6px 8px; vertical-align: top; }
+  .faktur-table td.col-no { width: 35px; text-align: center; border-right: 1.5px solid #000; }
+  .faktur-table td.col-qty, .faktur-table td.col-harga, .faktur-table td.col-jml { text-align: center; width: 100px; }
+  .faktur-spacer { height: 90px; }
+  .faktur-bottom { border-top: 2px solid #000; padding-top: 6px; display: flex; justify-content: space-between; }
+  .faktur-signs { display: flex; justify-content: space-between; text-align: center; margin-top: 18px; padding: 0 20px; }
 
-  .faktur-items-table td {
-    padding: 6px;
-    border: none;
-    vertical-align: top;
-    font-size: 12.5px;
-  }
-  .faktur-items-table td.col-no {
-    text-align: center;
-    border-right: 1px solid #000;
-    font-weight: 700;
-  }
-  .faktur-items-table td.col-qty { text-align: center; }
-  .faktur-items-table td.col-harga,
-  .faktur-items-table td.col-jumlah { text-align: right; padding-right: 12px; }
-
-  .faktur-filler-row td {
-    height: 75px;
-    border-bottom: 1px dotted #ccc;
-  }
-  .faktur-filler-row td.col-no {
-    border-right: 1px solid #000;
-  }
-
-  .faktur-summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-top: 6px;
-  }
-  .faktur-note {
-    display: flex;
-    gap: 10px;
-    max-width: 62%;
-    font-size: 12px;
-    line-height: 1.35;
-  }
-  .faktur-note strong { font-weight: 700; }
-  .faktur-totals-table {
-    border-collapse: collapse;
-    min-width: 240px;
-  }
-  .faktur-totals-table td {
-    padding: 2px 6px;
-    border: none;
-    font-weight: 700;
-    font-size: 12.5px;
-  }
-  .faktur-totals-label { text-align: right; }
-  .faktur-totals-val { text-align: right; padding-right: 12px !important; min-width: 110px; }
-
-  .faktur-footer-sign {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr 1fr;
-    text-align: center;
-    margin-top: 14px;
-    font-weight: 700;
-    font-size: 12.5px;
-    line-height: 1.35;
-  }
-  .sign-space {
-    height: 36px;
-  }
-
-  /* 2. FORMAT TANDA TERIMA SERVIS (STANDAR THERMAL 58mm / 80mm) */
-  .thermal-box {
-    width: 58mm;
-    max-width: 76mm;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 11px;
-    line-height: 1.3;
-    color: #000;
-    padding: 2mm;
-  }
-  .th-center { text-align: center; }
-  .th-bold { font-weight: 700; }
-  .th-line { border-top: 1px dashed #000; margin: 5px 0; }
-  .th-row { display: flex; justify-content: space-between; }
-  .th-sign {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    text-align: center;
-    font-size: 10px;
-  }
+  /* THERMAL 58MM */
+  .thermal-box { width: 58mm; font-family: monospace; font-size: 11px; line-height: 1.35; color: #000; }
+  .t-center { text-align: center; }
+  .t-dash { border-top: 1px dashed #000; margin: 6px 0; }
 }
