@@ -16,7 +16,7 @@
         <div class="logo-box">JK</div>
         <div>
           <h1 id="headerStoreName">JAVA KOMPUTER</h1>
-          <p id="headerStoreSub">Servis Komputer, Laptop, HP & Printer</p>
+          <p id="headerStoreSub">Servis Komputer, Laptop, Handphone, Printer & Elektronik</p>
         </div>
       </div>
       <div class="topbar-actions">
@@ -56,7 +56,7 @@
     <!-- TAB 1: DAFTAR SERVIS -->
     <main id="tab-servis" class="tab-content active">
       <div class="toolbar">
-        <input type="text" id="searchInput" placeholder="Cari nama pelanggan, no HP, tipe perangkat, atau no faktur..." oninput="renderServices()">
+        <input type="text" id="searchInput" placeholder="Cari nama pelanggan, instansi, no HP, tipe perangkat, atau no faktur..." oninput="renderServices()">
         <select id="filterStatus" onchange="renderServices()">
           <option value="ALL">Semua Status</option>
           <option value="Antrean">Antrean</option>
@@ -75,10 +75,10 @@
               <th>Faktur & Tgl</th>
               <th>Pelanggan</th>
               <th>Perangkat</th>
-              <th>Keluhan & Tindakan</th>
-              <th>Status & Garansi</th>
+              <th>Rincian Pekerjaan / Keluhan</th>
+              <th>Status & Pembayaran</th>
               <th>Total</th>
-              <th>Aksi</th>
+              <th>Cetak & Aksi</th>
             </tr>
           </thead>
           <tbody id="serviceTableBody"></tbody>
@@ -102,8 +102,12 @@
               <input type="date" id="tanggal" required>
             </div>
             <div class="form-group">
-              <label>Nama Pelanggan / Instansi *</label>
-              <input type="text" id="nama" list="customerList" placeholder="Contoh: Bpk. Heru / SDN 3 Demangsari" required oninput="autofillCustomer()">
+              <label>Instansi / Perusahaan (Opsional)</label>
+              <input type="text" id="perusahaan" placeholder="Contoh: PT / SDN 3 Demangsari / Umum">
+            </div>
+            <div class="form-group">
+              <label>Nama Pelanggan *</label>
+              <input type="text" id="nama" list="customerList" placeholder="Contoh: Ibu Hida / Bpk. Heru" required oninput="autofillCustomer()">
               <datalist id="customerList"></datalist>
             </div>
             <div class="form-group">
@@ -112,7 +116,7 @@
             </div>
             <div class="form-group">
               <label>Alamat</label>
-              <input type="text" id="alamat" placeholder="Contoh: Demangsari, Ayah, Kebumen">
+              <input type="text" id="alamat" placeholder="Contoh: Mangunweni / Candirenggo">
             </div>
             <div class="form-group">
               <label>Kategori Perangkat *</label>
@@ -126,14 +130,14 @@
             </div>
             <div class="form-group">
               <label>Merek *</label>
-              <input type="text" id="merek" placeholder="Contoh: Asus, Lenovo, Epson, Samsung" required>
+              <input type="text" id="merek" placeholder="Contoh: Lenovo, Asus, Epson, Samsung" required>
             </div>
             <div class="form-group">
               <label>Tipe / Model Perangkat *</label>
-              <input type="text" id="tipe" placeholder="Contoh: X441N / L3110 / A14" required>
+              <input type="text" id="tipe" placeholder="Contoh: Ideapad 320 / X441N / L3110" required>
             </div>
             <div class="form-group">
-              <label>Kelengkapan</label>
+              <label>Kelengkapan (Untuk Tanda Terima)</label>
               <input type="text" id="kelengkapan" placeholder="Contoh: Unit + Charger + Tas">
             </div>
             <div class="form-group">
@@ -147,6 +151,14 @@
               </select>
             </div>
             <div class="form-group">
+              <label>Metode Pembayaran (Trf/Cash)</label>
+              <select id="metodeBayar">
+                <option value="Cash">Cash</option>
+                <option value="Transfer BCA">Transfer BCA</option>
+                <option value="Belum Lunas">Belum Lunas / DP</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label>Garansi</label>
               <select id="garansi">
                 <option value="1 Bulan">Garansi 1 Bulan</option>
@@ -156,14 +168,26 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Total Biaya (Rp)</label>
+              <label>Quantity</label>
+              <input type="number" id="qty" value="1" min="1" required>
+            </div>
+            <div class="form-group">
+              <label>Sub Total / Harga (Rp)</label>
+              <input type="number" id="subtotal" value="0" min="0" required oninput="calcTotal()">
+            </div>
+            <div class="form-group">
+              <label>Diskon (Rp)</label>
+              <input type="number" id="diskon" value="0" min="0" oninput="calcTotal()">
+            </div>
+            <div class="form-group">
+              <label>Total Akhir (Rp)</label>
               <input type="number" id="total" value="0" min="0" required>
             </div>
           </div>
 
           <div class="form-group full-width">
-            <label>Keluhan & Rincian Tindakan / Sparepart *</label>
-            <textarea id="keluhan" rows="3" placeholder="Contoh: Keyboard error -> Replace Keyboard baru + Install Windows 10" required></textarea>
+            <label>Keluhan & Rincian Tindakan / Sparepart * (Pisahkan baris baru atau tanda | untuk tiap item)</label>
+            <textarea id="keluhan" rows="3" placeholder="Contoh:&#10;* Replace Keyboard&#10;* Install Windows 10" required></textarea>
           </div>
 
           <div class="form-actions">
@@ -177,13 +201,13 @@
     <!-- TAB 3: PELANGGAN -->
     <main id="tab-pelanggan" class="tab-content">
       <div class="toolbar">
-        <input type="text" id="searchCustomerInput" placeholder="Cari nama pelanggan, nomor HP, atau alamat..." oninput="renderCustomers()">
+        <input type="text" id="searchCustomerInput" placeholder="Cari nama pelanggan, instansi, nomor HP, atau alamat..." oninput="renderCustomers()">
       </div>
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>Nama Pelanggan</th>
+              <th>Nama & Instansi</th>
               <th>No. WhatsApp</th>
               <th>Alamat</th>
               <th>Jumlah Servis</th>
@@ -200,21 +224,21 @@
     <main id="tab-backup" class="tab-content">
       <div class="card">
         <h2>Backup & Migrasi Data (Offline & Online)</h2>
-        <p class="muted">Gunakan fitur ini untuk memasukkan file JSON lama Anda (format Java Komputer maupun format MongoDB) atau menyimpan cadangan data ke Google Drive.</p>
+        <p class="muted">Import file JSON lama Anda (otomatis membersihkan nama perangkat ganda) atau unduh cadangan data.</p>
         <div class="backup-actions">
           <div class="backup-box">
             <h3>📥 Import Data JSON</h3>
-            <p>Mendukung file JSON asli Anda (<code>customers</code> + <code>invoice_history</code>) maupun format array dokumen MongoDB.</p>
+            <p>Mendukung file JSON asli Anda (<code>customers</code> + <code>invoice_history</code>) maupun format backup aplikasi ini.</p>
             <input type="file" id="importFile" accept=".json" onchange="importJSON(event)">
           </div>
           <div class="backup-box">
             <h3>📤 Export Backup JSON</h3>
-            <p>Unduh seluruh database aplikasi saat ini untuk disimpan ke Google Drive atau di-import ke MongoDB Atlas.</p>
+            <p>Unduh seluruh database aplikasi saat ini untuk disimpan ke Google Drive atau PC.</p>
             <button class="btn btn-primary" onclick="exportJSON()">Download Backup (.json)</button>
           </div>
           <div class="backup-box">
             <h3>🗑️ Reset Data Lokal</h3>
-            <p>Hapus semua data di browser ini (pastikan sudah export backup terlebih dahulu).</p>
+            <p>Hapus semua data di browser ini untuk mengulang import dari awal.</p>
             <button class="btn btn-danger" onclick="clearAllData()">Hapus Semua Data</button>
           </div>
         </div>
@@ -225,25 +249,37 @@
   <!-- MODAL PENGATURAN TOKO -->
   <div id="settingsModal" class="modal no-print">
     <div class="modal-content">
-      <h2>Pengaturan Profil Toko</h2>
+      <h2>Pengaturan Profil & Rekening Faktur</h2>
       <div class="form-group">
         <label>Nama Toko</label>
         <input type="text" id="setStoreName">
       </div>
       <div class="form-group">
-        <label>Tagline / Layanan</label>
-        <input type="text" id="setStoreSub">
+        <label>Alamat Baris 1</label>
+        <input type="text" id="setStoreAddress1">
       </div>
       <div class="form-group">
-        <label>Alamat Toko</label>
-        <input type="text" id="setStoreAddress">
+        <label>Alamat Baris 2 & Kode Pos</label>
+        <input type="text" id="setStoreAddress2">
       </div>
       <div class="form-group">
         <label>No. HP / WhatsApp Toko</label>
         <input type="text" id="setStorePhone">
       </div>
       <div class="form-group">
-        <label>Catatan Garansi pada Nota</label>
+        <label>Kota (Untuk Tanggal Faktur)</label>
+        <input type="text" id="setStoreCity">
+      </div>
+      <div class="form-group">
+        <label>Info Rekening Bank (Tampil di Bawah Faktur)</label>
+        <input type="text" id="setBankInfo" placeholder="Transfer BCA | Rek. 7675 13 0914">
+      </div>
+      <div class="form-group">
+        <label>Nama Pemilik / Penandatangan</label>
+        <input type="text" id="setOwnerName">
+      </div>
+      <div class="form-group">
+        <label>Note / Catatan Bawah Faktur</label>
         <textarea id="setStoreNote" rows="2"></textarea>
       </div>
       <div class="form-actions">
@@ -253,6 +289,7 @@
     </div>
   </div>
 
+  <!-- Area Cetak Khusus -->
   <div id="printArea" class="print-only"></div>
 
   <script src="app.js"></script>

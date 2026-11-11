@@ -14,7 +14,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
 body { background: var(--bg); color: var(--text); font-size: 14px; }
 
-.app-container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.app-container { max-width: 1250px; margin: 0 auto; padding: 16px; }
 
 /* Topbar */
 .topbar {
@@ -37,15 +37,16 @@ body { background: var(--bg); color: var(--text); font-size: 14px; }
 
 .btn {
   padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;
-  font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
+  font-size: 13px; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;
 }
 .btn-primary { background: var(--primary); color: #fff; }
 .btn-primary:hover { background: var(--primary-dark); }
 .btn-outline { background: #fff; color: var(--text); border: 1px solid var(--border); }
 .btn-outline:hover { background: #f8fafc; }
 .btn-success { background: var(--success); color: #fff; }
+.btn-warning { background: #f59e0b; color: #fff; }
 .btn-danger { background: var(--danger); color: #fff; }
-.btn-sm { padding: 5px 8px; font-size: 12px; }
+.btn-sm { padding: 5px 8px; font-size: 11px; }
 
 /* Navigation */
 .nav-tabs { display: flex; gap: 8px; margin: 16px 0; overflow-x: auto; padding-bottom: 4px; }
@@ -73,8 +74,8 @@ body { background: var(--bg); color: var(--text); font-size: 14px; }
 
 .table-wrapper { background: var(--card); border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; text-align: left; }
-th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { background: #f8fafc; font-size: 12px; text-transform: uppercase; color: var(--muted); }
+th, td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: #f8fafc; font-size: 11px; text-transform: uppercase; color: var(--muted); }
 tr:hover { background: #f8fafc; }
 
 .status-pill { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; }
@@ -87,14 +88,14 @@ tr:hover { background: #f8fafc; }
 /* Form & Card */
 .card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
 .card h2 { margin-bottom: 16px; font-size: 17px; }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #334155; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.form-group { margin-bottom: 10px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #334155; }
 .form-group input, .form-group select, .form-group textarea {
-  width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px;
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px;
 }
 .full-width { grid-column: 1 / -1; margin-top: 6px; }
-.form-actions { display: flex; gap: 10px; margin-top: 16px; }
+.form-actions { display: flex; gap: 10px; margin-top: 14px; }
 
 /* Backup */
 .backup-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 16px; }
@@ -108,18 +109,189 @@ tr:hover { background: #f8fafc; }
   align-items: center; justify-content: center; padding: 16px; z-index: 100;
 }
 .modal.open { display: flex; }
-.modal-content { background: #fff; padding: 20px; border-radius: 12px; width: 100%; max-width: 480px; }
+.modal-content { background: #fff; padding: 20px; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
 
-/* Print Mode */
+/* ================= PRINT STYLES ================= */
 .print-only { display: none; }
+
 @media print {
   .no-print { display: none !important; }
   .print-only { display: block !important; color: #000; background: #fff; }
-  body { background: #fff; }
-  .nota-thermal { width: 76mm; font-family: monospace; font-size: 12px; line-height: 1.4; }
-  .nota-a5 { width: 100%; font-family: Arial, sans-serif; font-size: 13px; border: 1px solid #000; padding: 16px; }
-  .nota-center { text-align: center; }
-  .nota-line { border-top: 1px dashed #000; margin: 8px 0; }
-  .nota-table { width: 100%; border-collapse: collapse; margin: 8px 0; }
-  .nota-table td, .nota-table th { border: 1px solid #000; padding: 6px; text-align: left; }
+  body { background: #fff; margin: 0; padding: 0; }
+
+  /* 1. FORMAT FAKTUR RESMI JAVA KOMPUTER */
+  .faktur-box {
+    width: 100%;
+    max-width: 210mm;
+    margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12.5px;
+    color: #000;
+    padding: 8px 12px;
+  }
+  .faktur-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+  .faktur-brand-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .faktur-brand-title h1 {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+  .faktur-title-right {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding-right: 12px;
+  }
+  .faktur-sub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #000;
+  }
+  .faktur-store-info {
+    line-height: 1.35;
+    font-weight: 600;
+  }
+  .faktur-meta-table {
+    border-collapse: collapse;
+    min-width: 250px;
+  }
+  .faktur-meta-table td {
+    padding: 1px 4px;
+    border: none;
+    font-weight: 700;
+    font-size: 12.5px;
+  }
+  .faktur-meta-val {
+    text-align: center;
+    min-width: 135px;
+  }
+  .faktur-cust-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5px 0 8px 0;
+  }
+  .faktur-cust-left {
+    padding-left: 24px;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  .faktur-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 3px double #000;
+    border-bottom: 3px double #000;
+  }
+  .faktur-items-table th {
+    background: none !important;
+    color: #000 !important;
+    text-transform: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-bottom: 1.5px solid #000;
+    text-align: center;
+  }
+  .faktur-items-table th.col-no { width: 32px; border-right: 1px solid #000; }
+  .faktur-items-table th.col-nama { text-align: center; }
+  .faktur-items-table th.col-qty { width: 75px; }
+  .faktur-items-table th.col-harga { width: 110px; }
+  .faktur-items-table th.col-jumlah { width: 110px; }
+
+  .faktur-items-table td {
+    padding: 6px;
+    border: none;
+    vertical-align: top;
+    font-size: 12.5px;
+  }
+  .faktur-items-table td.col-no {
+    text-align: center;
+    border-right: 1px solid #000;
+    font-weight: 700;
+  }
+  .faktur-items-table td.col-qty { text-align: center; }
+  .faktur-items-table td.col-harga,
+  .faktur-items-table td.col-jumlah { text-align: right; padding-right: 12px; }
+
+  .faktur-filler-row td {
+    height: 75px;
+    border-bottom: 1px dotted #ccc;
+  }
+  .faktur-filler-row td.col-no {
+    border-right: 1px solid #000;
+  }
+
+  .faktur-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 6px;
+  }
+  .faktur-note {
+    display: flex;
+    gap: 10px;
+    max-width: 62%;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .faktur-note strong { font-weight: 700; }
+  .faktur-totals-table {
+    border-collapse: collapse;
+    min-width: 240px;
+  }
+  .faktur-totals-table td {
+    padding: 2px 6px;
+    border: none;
+    font-weight: 700;
+    font-size: 12.5px;
+  }
+  .faktur-totals-label { text-align: right; }
+  .faktur-totals-val { text-align: right; padding-right: 12px !important; min-width: 110px; }
+
+  .faktur-footer-sign {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    text-align: center;
+    margin-top: 14px;
+    font-weight: 700;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+  .sign-space {
+    height: 36px;
+  }
+
+  /* 2. FORMAT TANDA TERIMA SERVIS (STANDAR THERMAL 58mm / 80mm) */
+  .thermal-box {
+    width: 58mm;
+    max-width: 76mm;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    line-height: 1.3;
+    color: #000;
+    padding: 2mm;
+  }
+  .th-center { text-align: center; }
+  .th-bold { font-weight: 700; }
+  .th-line { border-top: 1px dashed #000; margin: 5px 0; }
+  .th-row { display: flex; justify-content: space-between; }
+  .th-sign {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 10px;
+  }
 }
