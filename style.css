@@ -1,0 +1,125 @@
+:root {
+  --primary: #1d4ed8;
+  --primary-dark: #1e3a8a;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); font-size: 14px; }
+
+.app-container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+
+/* Topbar */
+.topbar {
+  background: #0f172a; color: #fff; padding: 16px 20px; border-radius: 12px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo-box {
+  width: 44px; height: 44px; background: var(--primary); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px;
+}
+.brand h1 { font-size: 18px; letter-spacing: 0.5px; }
+.brand p { font-size: 12px; color: #94a3b8; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+/* Badges & Buttons */
+.badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-online { background: #dcfce7; color: #166534; }
+.badge-offline { background: #fee2e2; color: #991b1b; }
+
+.btn {
+  padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;
+  font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--text); border: 1px solid var(--border); }
+.btn-outline:hover { background: #f8fafc; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-sm { padding: 5px 8px; font-size: 12px; }
+
+/* Navigation */
+.nav-tabs { display: flex; gap: 8px; margin: 16px 0; overflow-x: auto; padding-bottom: 4px; }
+.tab-btn {
+  background: #fff; border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px;
+  cursor: pointer; font-weight: 600; color: var(--muted); white-space: nowrap;
+}
+.tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: var(--card); padding: 16px; border-radius: 10px; border: 1px solid var(--border); }
+.stat-card span { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
+.stat-card strong { font-size: 20px; }
+.text-warning { color: var(--warning); }
+.text-success { color: var(--success); }
+.text-primary { color: var(--primary); }
+
+/* Content & Table */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.toolbar { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.toolbar input { flex: 1; min-width: 220px; padding: 10px; border-radius: 8px; border: 1px solid var(--border); }
+.toolbar select { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: #fff; }
+
+.table-wrapper { background: var(--card); border-radius: 10px; border: 1px solid var(--border); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th, td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: #f8fafc; font-size: 12px; text-transform: uppercase; color: var(--muted); }
+tr:hover { background: #f8fafc; }
+
+.status-pill { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-block; }
+.st-Antrean { background: #e2e8f0; color: #334155; }
+.st-Proses { background: #fef3c7; color: #92400e; }
+.st-Menunggu { background: #ffedd5; color: #9a3412; }
+.st-Selesai { background: #dcfce7; color: #166534; }
+.st-Diambil { background: #dbeafe; color: #1e40af; }
+
+/* Form & Card */
+.card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
+.card h2 { margin-bottom: 16px; font-size: 17px; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #334155; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px;
+}
+.full-width { grid-column: 1 / -1; margin-top: 6px; }
+.form-actions { display: flex; gap: 10px; margin-top: 16px; }
+
+/* Backup */
+.backup-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 16px; }
+.backup-box { padding: 16px; border: 1px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; }
+.backup-box h3 { font-size: 15px; margin-bottom: 6px; }
+.backup-box p { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+/* Modal */
+.modal {
+  display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
+  align-items: center; justify-content: center; padding: 16px; z-index: 100;
+}
+.modal.open { display: flex; }
+.modal-content { background: #fff; padding: 20px; border-radius: 12px; width: 100%; max-width: 480px; }
+
+/* Print Mode */
+.print-only { display: none; }
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block !important; color: #000; background: #fff; }
+  body { background: #fff; }
+  .nota-thermal { width: 76mm; font-family: monospace; font-size: 12px; line-height: 1.4; }
+  .nota-a5 { width: 100%; font-family: Arial, sans-serif; font-size: 13px; border: 1px solid #000; padding: 16px; }
+  .nota-center { text-align: center; }
+  .nota-line { border-top: 1px dashed #000; margin: 8px 0; }
+  .nota-table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  .nota-table td, .nota-table th { border: 1px solid #000; padding: 6px; text-align: left; }
+}
